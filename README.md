@@ -1,204 +1,118 @@
-# 🖼️ Image Super-Resolution using SRCNN
+# 🖼️ Advanced Image Denoising: A Comparative Study
 
-This project implements a Super-Resolution Convolutional Neural Network (SRCNN) for enhancing image resolution. The model can upscale low-resolution images by 2×, 3×, or 4× while recovering fine details and sharpness.
+A comprehensive analysis of image denoising techniques, featuring both traditional and advanced algorithms. This project evaluates various filters for noise reduction while preserving image details.
 
-## 🚀 Quick Start
+## 🎯 Project Overview
 
-### 1. Installation
+This project implements and compares multiple state-of-the-art image denoising techniques:
 
-```bash
-# Clone the repository
-git clone https://github.com/chanikkyasaai/isr
-cd image-analysis
+### Traditional Filters
+- **Mean Filter** - Simple averaging filter
+- **Median Filter** - Effective for salt-and-pepper noise
+- **Gaussian Filter** - Excellent for Gaussian noise
 
-# Create and activate a virtual environment (recommended)
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+### Advanced Filters
+- **Improved Adaptive Median Filter** - Enhanced version with better edge preservation
+- **Bilateral Filter** - Edge-preserving smoothing
+- **Non-Local Means (NLM)** - Advanced algorithm for texture preservation
 
-# Install dependencies
-pip install -r requirements.txt
-```
+## 📊 Performance Metrics
 
-### 2. Download Dataset (DIV2K Recommended)
+Each filter is evaluated using:
+- **PSNR (Peak Signal-to-Noise Ratio)** - Quantitative measurement of noise reduction
+- **Visual Quality** - Subjective assessment of edge and detail preservation
 
-```bash
-# Create data directories
-mkdir -p data/{train_hr,val_hr,test_hr}
+## 🚀 Installation
 
-# Download DIV2K dataset (800 training + 100 validation images)
-# Training set (will take some time to download)
-wget http://data.vision.ee.ethz.ch/cvl/DIV2K/DIV2K_train_HR.zip -P data/
-unzip data/DIV2K_train_HR.zip -d data/train_hr
-
-# Validation set
-wget http://data.vision.ee.ethz.ch/cvl/DIV2K/DIV2K_valid_HR.zip -P data/
-unzip data/DIV2K_valid_HR.zip -d data/val_hr
-
-# For testing, you can use Set5 or Set14 dataset
-# Example with Set5:
-wget https://github.com/tensorflow/models/raw/master/research/srgan/datasets/DIV2K.tar.gz
-tar -xzf DIV2K.tar.gz -C data/test_hr/
-```
-
-### 3. Train the Model
-
-```bash
-# Start training (adjust parameters as needed)
-python train_srcnn.py \
-    --train_dir data/train_hr \
-    --val_dir data/val_hr \
-    --batch_size 16 \
-    --epochs 100 \
-    --output_dir models/
-```
-
-### 4. Test the Model
-
-```bash
-# Evaluate on test set
-python test_srcnn.py \
-    --model_path models/srcnn_best.h5 \
-    --test_dir data/test_hr \
-    --output_dir results/
-```
-
-### 5. Upscale Your Own Images
-
-```bash
-# Upscale a single image
-python upscale_image.py \
-    --input your_image.jpg \
-    --output upscaled_result.png \
-    --model models/srcnn_best.h5
-```
-
-## 🏗️ Project Structure
-
-```
-image-analysis/
-├── config.py           # Configuration parameters
-├── data_loader.py      # Image loading, preprocessing, and augmentation
-├── srcnn_model.py      # SRCNN model architecture
-├── train_srcnn.py      # Training pipeline
-├── test_srcnn.py       # Testing and evaluation
-├── upscale_image.py    # Script to upscale single images
-├── requirements.txt    # Project dependencies
-└── data/               # Dataset directory (create this)
-    ├── train_hr/       # Training high-res images
-    ├── val_hr/         # Validation high-res images
-    └── test_hr/        # Test high-res images
-```
-
-## 🏆 Model Architecture
-
-The SRCNN model consists of three main layers:
-
-1. **Patch Extraction**: 9×9 convolutional layer with 64 filters and ReLU activation
-2. **Non-linear Mapping**: 1×1 convolutional layer with 32 filters and ReLU activation
-3. **Reconstruction**: 5×5 convolutional layer with 3 filters (for RGB) and linear activation
-
-## 📊 Performance
-
-| Dataset | Scale | PSNR (dB) | SSIM |
-|---------|-------|-----------|------|
-| Set5    | ×2    | 36.66     | 0.954|
-| Set5    | ×3    | 32.75     | 0.909|
-| Set5    | ×4    | 30.49     | 0.862|
-
-## 🛠️ Customization
-
-### Training Parameters
-Edit `config.py` to adjust:
-- Image patch size
-- Batch size
-- Learning rate
-- Number of epochs
-- Model architecture
-
-### Using Custom Dataset
-1. Organize your images into `train_hr/`, `val_hr/`, and `test_hr/` directories
-2. Update paths in `config.py` if needed
-3. Run the training script
-
-## 📝 Notes
-
-- The model works best with 2× to 4× upscaling
-- Training requires a GPU for reasonable performance
-- For best results, use high-quality source images
-- The model is trained on the Y channel (luminance) in YCbCr color space
-
-## 👤 Author
-
-**Chanikya Nelapatla**  
-[![GitHub](https://img.shields.io/badge/GitHub-chanikkyasaai-181717?style=flat&logo=github)](https://github.com/chanikkyasaai/)
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📜 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-*Created with ❤️ by Chanikya Nelapatla*
-
-## Requirements
-
-- Python 3.7+
-- TensorFlow 2.x
-- OpenCV
-- NumPy
-- Matplotlib
-
-## Installation
-
-1. Clone the repository:
+1. **Clone the repository**:
    ```bash
    git clone <repository-url>
    cd image-analysis
    ```
 
-2. Install the required packages:
+2. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-## Usage
+## 🛠️ Usage
 
-1. Place your high-resolution test image in the project directory and update the `SAMPLE_IMAGE_PATH` in `config.py` if needed.
+1. **Prepare your image**:
+   - Place your high-resolution test image in the `data/test_hr/` directory
+   - Ensure the image is in a common format (JPEG, PNG, BMP)
 
-2. Run the main script:
-   ```bash
-   python main_upscale.py
+2. **Configuration** (optional):
+   Edit `config.py` to adjust parameters:
+   ```python
+   TEST_IMAGE_PATH = 'data/test_hr/your_image.jpg'  # Path to your image
+   NOISE_TYPE = 'gaussian'  # Type of noise to add
+   NOISE_INTENSITY = 25     # Noise intensity (standard deviation)
+   WINDOW_SIZE = 5          # Base window size for filters (odd number)
    ```
 
-3. The script will:
-   - Load the sample image
-   - Generate a low-resolution version
-   - Create a bicubic upscaled version
-   - Generate an SRCNN upscaled version (untrained)
-   - Save all results in the `outputs/` directory
-   - Display PSNR metrics for comparison
+3. **Run the analysis**:
+   ```bash
+   python main_analysis.py
+   ```
 
-## Model Architecture
+## 📂 Output
 
-The SRCNN model consists of three main layers:
+The script generates the following in the `output/` directory:
+- `original.png` - Original input image
+- `noisy.png` - Noisy version of the image
+- `*_filtered.png` - Processed images from each filter
+- `comparison_results.png` - Side-by-side comparison of all results
 
-1. **Patch Extraction**: 9×9 convolutional layer with 64 filters and ReLU activation
-2. **Non-linear Mapping**: 1×1 convolutional layer with 32 filters and ReLU activation
-3. **Reconstruction**: 5×5 convolutional layer with 3 filters (for RGB) and linear activation
+## 📈 Results Interpretation
 
-## Notes
+- **PSNR Values**: Higher values indicate better noise reduction
+- **Visual Quality**: Check the `comparison_results.png` to evaluate:
+  - Edge preservation
+  - Detail retention
+  - Artifact introduction
 
-- The provided implementation demonstrates the pipeline with an untrained model.
-- For better results, you would need to train the model on a dataset of high-resolution and corresponding low-resolution image pairs.
-- The current implementation focuses on the correct inference structure and comparison with bicubic interpolation.
+## 🏆 Performance Comparison
 
-## Outputs
+Typical PSNR results (higher is better):
 
-The script generates the following output files in the `outputs/` directory:
-- `01_lr_upscaled.png`: Low-resolution input upscaled using bicubic interpolation
-- `02_bicubic.png`: Direct bicubic upscaling result
-- `03_srcnn_output.png`: SRCNN model output (untrained)
-- `04_original_hr.png`: Original high-resolution image (for comparison)
+| Filter Type          | PSNR (dB) | Best For                     |
+|----------------------|-----------|------------------------------|
+| Noisy Image          | ~20-22    | -                            |
+| Mean Filter          | ~28-30    | Quick processing             |
+| Median Filter        | ~28-30    | Salt-and-pepper noise        |
+| Gaussian Filter      | ~29-31    | Gaussian noise               |
+| Adaptive Median      | ~29-31    | Mixed noise types            |
+| Bilateral Filter     | ~28-30    | Edge preservation            |
+| Non-Local Means      | ~25-27    | Texture preservation         |
+
+## 🛠️ Customization
+
+### Adding New Filters
+1. Add your filter function to `ip_filters.py`
+2. Update `main_analysis.py` to include your filter in the processing pipeline
+
+### Adjusting Parameters
+Modify the filter parameters in `main_analysis.py` for different results:
+- For Bilateral Filter: Adjust `d`, `sigma_color`, `sigma_space`
+- For NLM: Adjust `h`, `template_window_size`, `search_window_size`
+
+## 📚 Dependencies
+
+- Python 3.7+
+- OpenCV
+- NumPy
+- Matplotlib
+- scikit-image
+- tqdm (for progress bars)
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📧 Contact
+
+For any questions or suggestions, please open an issue or contact the project maintainers.
