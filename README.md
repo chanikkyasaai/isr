@@ -8,7 +8,7 @@ This project implements a Super-Resolution Convolutional Neural Network (SRCNN) 
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/chanikkyasaai/isr
 cd image-analysis
 
 # Create and activate a virtual environment (recommended)
